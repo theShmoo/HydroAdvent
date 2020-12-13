@@ -18,6 +18,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import Button from '@material-ui/core/Button';
 
 import withRoot from './withRoot';
 import { users } from './users';
@@ -45,9 +46,15 @@ const styles = theme => ({
   selectEmpty: {
     marginTop: theme.spacing(2),
   },
+  button: {
+    margin: theme.spacing(1),
+  }
 });
 
-const Checklist = ({ items, classes }) => {
+const Months = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September',
+  'Oktober', 'November', 'Dezember'];
+
+const Checklist = ({ items, day, classes }) => {
   const listItems = items.map((item, i) => <ListItem key={i} button>
     <ListItemIcon>
       <CheckCircleIcon />
@@ -79,19 +86,30 @@ class App extends Component {
     this.setState({ user: event.target.value });
   };
 
+  handlePrevClick = event => {
+    this.setState(prevstate => ({ day: prevstate.day - 1 }));
+  };
+
+  handleNextClick = event => {
+    this.setState(prevstate => ({ day: prevstate.day + 1 }));
+  };
+
   render() {
     const { classes } = this.props;
     const { user, day } = this.state;
-    const userItems = users.map((u, i) => <MenuItem key={i} value={u}>{u}</MenuItem>);
+    const userItems = users.map(
+      (u, i) => <MenuItem key={i} value={u}>{u}</MenuItem>
+    );
     const myrng = new seedrandom(user);
-    let shuffledDeeds = goodDeeds;
+    let shuffledDeeds = [...goodDeeds];
     shuffleArray(shuffledDeeds, myrng);
     const startIndex = ((day - 1) * 3) % shuffledDeeds.length;
-
     const selection = [
       shuffledDeeds[startIndex],
       shuffledDeeds[startIndex + 1],
       shuffledDeeds[startIndex + 2]];
+
+    const month = Months[new Date().getMonth()];
 
     return <div className={classes.root}>
       <AppBar position="static">
@@ -122,7 +140,29 @@ class App extends Component {
             </form>
           </Grid>
           <Grid item xs={12}>
-            {user ? <Checklist items={selection} classes={classes} /> : "Wähle deinen Namen"}
+            {user ?
+              <div>
+                <Typography variant="body1" color="inherit" className={classes.flex}>
+                  Versuche diese gute Taten zu erfüllen.
+                  <br />
+                  Deine Aufgaben vom {day}. {month}
+                </Typography>
+                <Checklist items={selection} classes={classes} />
+                {day > 1 ?
+                  <Button variant="contained" color="primary" className={classes.button} onClick={this.handlePrevClick}>
+                    {day - 1}. {month}
+                  </Button>
+                  : ""}
+                {day < new Date().getDate() ?
+                  <Button variant="contained" color="primary" className={classes.button} onClick={this.handleNextClick}>
+                    {day + 1}. {month}
+                  </Button>
+                  : ""}
+              </div>
+              : <Typography variant="body1" color="inherit" className={classes.flex}>
+                Wähle deinen Namen
+              </Typography>
+            }
           </Grid>
         </Grid>
       </Paper>
