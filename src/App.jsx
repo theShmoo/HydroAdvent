@@ -142,24 +142,37 @@ class App extends Component {
           <Grid item xs={12}>
             {user ?
               <div>
-                <Typography variant="body1" color="inherit" className={classes.flex}>
+                <Typography variant="body1" color="inherit">
                   Versuche diese gute Taten zu erfüllen.
                   <br />
                   Deine Aufgaben vom {day}. {month}
                 </Typography>
-                <Checklist items={selection} classes={classes} />
-                {day > 1 ?
-                  <Button variant="contained" color="primary" className={classes.button} onClick={this.handlePrevClick}>
+                {day > 14 ?
+                  <Button variant="contained" color="secondary" className={classes.button} onClick={this.handlePrevClick}>
                     {day - 1}. {month}
                   </Button>
                   : ""}
                 {day < new Date().getDate() ?
-                  <Button variant="contained" color="primary" className={classes.button} onClick={this.handleNextClick}>
+                  <Button variant="contained" color="secondary" className={classes.button} onClick={this.handleNextClick}>
                     {day + 1}. {month}
                   </Button>
                   : ""}
+                <Checklist items={selection} classes={classes} />
+                <Typography variant="body1" color="inherit">
+                  Für jede erfüllte Challenge dürft ihr auf dem folgenden Mural Board etwas gestalten:
+                </Typography>
+                <Button variant="contained"
+                  color="primary"
+                  className={classes.button}
+                  href="https://app.mural.co/t/sindbad5723/m/sindbad5723/1607887078116/2f2d3a82d4194ce8aa25cdc3aa36835c0efff3c6"
+                  target="_blank">
+                  Mural-Zeichen-Board
+                </Button>
+                <Typography variant="body1" color="inherit">
+                  Unser Vorschlag hierzu: überlegt euch beim ersten Hinzufügen eine Farbe die noch nicht am Board vertreten ist und fügt für jede von euch erledigte Challenge etwas in dieser Farbe hinzu (zb ein Punkt oder ein Postit) so dass am Schluss etwas gemeinsames entsteht.
+                </Typography>
               </div>
-              : <Typography variant="body1" color="inherit" className={classes.flex}>
+              : <Typography variant="body1" color="inherit">
                 Wähle deinen Namen
               </Typography>
             }
